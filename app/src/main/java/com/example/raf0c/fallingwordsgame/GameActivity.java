@@ -1,34 +1,35 @@
 package com.example.raf0c.fallingwordsgame;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.example.raf0c.fallingwordsgame.service.BackgroundMusicService;
-import com.example.raf0c.fallingwordsgame.views.WelcomeView;
 
-public class MainActivity extends AppCompatActivity implements WelcomeView.Listener {
+public class GameActivity extends AppCompatActivity {
 
     private BackgroundMusicService mBackgroundMusicService;
     private boolean mIsBackgroundMusicServiceBound = false;
-    private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final String TAG = GameActivity.class.getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        WelcomeView welcomeView = (WelcomeView) findViewById(R.id.welcome_layout);
-        welcomeView.setListener(this);
+        setContentView(R.layout.activity_game);
 
         Intent startBackgroundMusicService = new Intent(this, BackgroundMusicService.class);
-        startService(startBackgroundMusicService);
         bindService(startBackgroundMusicService, mBackgroundMusicServiceConnection, Context.BIND_AUTO_CREATE);
+
     }
 
     @Override
@@ -39,14 +40,13 @@ public class MainActivity extends AppCompatActivity implements WelcomeView.Liste
     @Override
     protected void onResume() {
         super.onResume();
-        resumeMusic();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         if(mIsBackgroundMusicServiceBound){
-            mBackgroundMusicService.pauseIntroMusic();
+            mBackgroundMusicService.pauseGameMusic();
         }
     }
 
@@ -64,19 +64,51 @@ public class MainActivity extends AppCompatActivity implements WelcomeView.Liste
         }
     }
 
-    @Override //Game lobby screen
-    public void onStartRequested(String name) {
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            displayWarningDialog();
+        }
+        return true;
+    }
 
-        Intent startGameIntent = new Intent(this, GameActivity.class);
-        startActivity(startGameIntent);
+    /**
+     * Display a warning dialog to inform the user is about to exit the game
+     * */
+    private void displayWarningDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Exit Game");
+        builder.setMessage("Are you sure? :(");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void resumeMusic(){
         if(mIsBackgroundMusicServiceBound){
             if(mBackgroundMusicService.getIsIntroMusicPaused()){
-                mBackgroundMusicService.resumeIntroMusic();
+                mBackgroundMusicService.resumeGameMusic();
             } else {
-                mBackgroundMusicService.startIntroMusic();
+                mBackgroundMusicService.startGameMusic();
             }
         } else {
             Log.d(TAG, "mBackgroundMusicService is not bound yet");
