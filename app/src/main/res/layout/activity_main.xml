@@ -9,8 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.raf0c.fallingwordsgame.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <include layout="@layout/welcome_view_layout" android:id="@+id/welcome_layout"/>
+
 </RelativeLayout>

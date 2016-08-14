@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">FallingWordsGame</string>
+
+    <!-- WelcomeView layout -->
+    <string name="start_btn_text">Start!</string>
+    <string name="player_name">Name: </string>
+    <string name="game_title">My Falling Words</string>
+
+    
 </resources>
