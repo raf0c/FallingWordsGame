@@ -13,11 +13,17 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import com.example.raf0c.fallingwordsgame.service.BackgroundMusicService;
+import com.example.raf0c.fallingwordsgame.utils.Constants;
+import com.example.raf0c.fallingwordsgame.views.GameLayoutView;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements GameLayoutView.Listener {
 
     private BackgroundMusicService mBackgroundMusicService;
     private boolean mIsBackgroundMusicServiceBound = false;
+
+    private String mPlayerName;
+
+    private GameLayoutView mGameLayoutView;
 
     private static final String TAG = GameActivity.class.getSimpleName();
 
@@ -25,10 +31,26 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_game);
+
+        mGameLayoutView = (GameLayoutView) findViewById(R.id.game_layout_id);
+        mGameLayoutView.setListener(this);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras == null) {
+            mPlayerName= null;
+        } else {
+            mPlayerName = extras.getString(Constants.PLAYER_KEY);
+        }
+
+        mGameLayoutView.updatePlayerName(mPlayerName);
 
         Intent startBackgroundMusicService = new Intent(this, BackgroundMusicService.class);
         bindService(startBackgroundMusicService, mBackgroundMusicServiceConnection, Context.BIND_AUTO_CREATE);
+
+        mGameLayoutView.startCountDown();
+
 
     }
 
@@ -48,6 +70,7 @@ public class GameActivity extends AppCompatActivity {
         if(mIsBackgroundMusicServiceBound){
             mBackgroundMusicService.pauseGameMusic();
         }
+        mGameLayoutView.cancelCountDown();
     }
 
     @Override
@@ -129,4 +152,9 @@ public class GameActivity extends AppCompatActivity {
         }
 
     };
+
+    @Override
+    public void onCountDownFinished() {
+
+    }
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.raf0c.fallingwordsgame.views.GameLayoutView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/current_word_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/current_word_text_size"
+        />
+
+    <TextView
+        android:id="@+id/count_down_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/warning_text_size"
+        />
+
+    <LinearLayout
+        android:id="@+id/player_info_layout"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        >
+
+        <TextView
+            android:id="@+id/player_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/player_message"
+            android:textSize="@dimen/current_word_text_size" />
+
+        <TextView
+            android:id="@+id/wrongs_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wrong_score"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="@dimen/current_word_text_size" />
+
+        <TextView
+            android:id="@+id/corrects_text_viw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/correct_score"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="@dimen/current_word_text_size" />
+
+    </LinearLayout>
+</com.example.raf0c.fallingwordsgame.views.GameLayoutView>

@@ -6,5 +6,10 @@
     <string name="player_name">Name: </string>
     <string name="game_title">My Falling Words</string>
 
+    <!-- Game layout-->
+
+    <string name="wrong_score">Wrong : %1$d! </string>
+    <string name="correct_score">Correct : %1$d! </string>
+    <string name="player_message">Hello, %1$s!</string>
 
 </resources>

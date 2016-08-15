@@ -6,4 +6,9 @@
     <!-- Welcome View layout -->
     <dimen name="max_name_width">100dp</dimen>
 
+    <!-- Game layout-->
+    <dimen name="warning_text_size">100sp</dimen>
+    <dimen name="current_word_text_size">32sp</dimen>
+
+
 </resources>

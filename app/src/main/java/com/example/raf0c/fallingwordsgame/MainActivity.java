@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.raf0c.fallingwordsgame.service.BackgroundMusicService;
+import com.example.raf0c.fallingwordsgame.utils.Constants;
 import com.example.raf0c.fallingwordsgame.views.WelcomeView;
 
 public class MainActivity extends AppCompatActivity implements WelcomeView.Listener {
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements WelcomeView.Liste
     public void onStartRequested(String name) {
 
         Intent startGameIntent = new Intent(this, GameActivity.class);
+        startGameIntent.putExtra(Constants.PLAYER_KEY, name);
         startActivity(startGameIntent);
     }
 
