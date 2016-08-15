@@ -6,25 +6,42 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import com.example.raf0c.fallingwordsgame.model.Word;
 import com.example.raf0c.fallingwordsgame.service.BackgroundMusicService;
 import com.example.raf0c.fallingwordsgame.utils.Constants;
+import com.example.raf0c.fallingwordsgame.utils.Utils;
 import com.example.raf0c.fallingwordsgame.views.GameLayoutView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameActivity extends AppCompatActivity implements GameLayoutView.Listener {
 
     private BackgroundMusicService mBackgroundMusicService;
     private boolean mIsBackgroundMusicServiceBound = false;
 
+    private List<Word> mWordsBank; // All words found on the json file
+
+
     private String mPlayerName;
 
     private GameLayoutView mGameLayoutView;
 
+
+    private static final String JSONFILE_NAME = "words.json";
+    private static final String ENGLISH_TAG   = "text_eng";
+    private static final String SPANISH_TAG   = "text_spa";
     private static final String TAG = GameActivity.class.getSimpleName();
 
 
@@ -51,6 +68,9 @@ public class GameActivity extends AppCompatActivity implements GameLayoutView.Li
 
         mGameLayoutView.startCountDown();
 
+        mWordsBank = new ArrayList<>();
+
+        new PopulateWordsBank().execute();
 
     }
 
@@ -93,6 +113,13 @@ public class GameActivity extends AppCompatActivity implements GameLayoutView.Li
             displayWarningDialog();
         }
         return true;
+    }
+
+    @Override // GameLayoutView.Listener method
+    public void onCountDownFinished() {
+        for (Word word: mWordsBank) {
+            Log.d(TAG, "The word is : " + word.getQuestionLanguage() + " - " + word.getAnswerLanguage());
+        }
     }
 
     /**
@@ -153,8 +180,39 @@ public class GameActivity extends AppCompatActivity implements GameLayoutView.Li
 
     };
 
-    @Override
-    public void onCountDownFinished() {
+    /**
+     * Task to populate the words bank
+     * */
+    private class PopulateWordsBank extends AsyncTask<Void,Void,Boolean> {
 
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+
+                JSONArray jsonArr = new JSONArray(Utils.readFileFromAssets(GameActivity.this, JSONFILE_NAME));
+
+                for (int i = 0; i < jsonArr.length(); i++) {
+
+                    JSONObject jsonObj = (JSONObject) jsonArr.get(i);
+                    Word word = new Word(jsonObj.get(SPANISH_TAG).toString(), jsonObj.get(ENGLISH_TAG).toString());
+                    mWordsBank.add(word);
+
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, e.getMessage());
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean){
+                mGameLayoutView.startCountDown();
+            } else {
+                Log.e(TAG, "Error on the JSONFile");
+            }
+        }
     }
 }
