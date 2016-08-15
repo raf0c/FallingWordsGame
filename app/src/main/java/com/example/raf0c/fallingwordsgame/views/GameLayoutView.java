@@ -58,7 +58,7 @@ public class GameLayoutView extends RelativeLayout {
         mWarningCountDownTv   = (TextView) findViewById(R.id.count_down_text_view);
         mPlayerNameTv         = (TextView) findViewById(R.id.player_text_view);
         mWrongScoreTv         = (TextView) findViewById(R.id.wrongs_text_view);
-        mCorrectScoreTv       = (TextView) findViewById(R.id.corrects_text_viw);
+        mCorrectScoreTv       = (TextView) findViewById(R.id.corrects_text_view);
 
     }
 
